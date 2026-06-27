@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: #06060b;
+  --color-surface: #0f0f18;
+  --color-surface-elevated: #161622;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-muted: #8b8b9e;
+  --color-foreground: #f4f4f8;
+  --color-accent: #a855f7;
+  --color-accent-secondary: #ec4899;
+  --color-accent-tertiary: #22d3ee;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(168, 85, 247, 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(236, 72, 153, 0.08), transparent),
+      radial-gradient(ellipse 50% 30% at 0% 100%, rgba(34, 211, 238, 0.06), transparent);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgba(168, 85, 247, 0.35);
+    color: white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply border border-border bg-surface/60 backdrop-blur-xl;
+  }
+
+  .glass-elevated {
+    @apply border border-border bg-surface-elevated/80 backdrop-blur-xl;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent via-accent-secondary to-accent-tertiary bg-clip-text text-transparent;
+  }
+
+  .glow-accent {
+    box-shadow:
+      0 0 40px rgba(168, 85, 247, 0.15),
+      0 0 80px rgba(236, 72, 153, 0.08);
+  }
+
+  .mesh-bg {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+}
