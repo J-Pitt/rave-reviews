@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { ArtistCard } from "@/components/artists/ArtistCard";
-import { artists } from "@/lib/mock-data";
+import { getAllArtists } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Artists",
   description: "Review and discover DJs and artists playing in NYC.",
 };
 
-export default function ArtistsPage() {
-  const sorted = [...artists].sort((a, b) => b.averageRating - a.averageRating);
+export default async function ArtistsPage() {
+  const sorted = await getAllArtists();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

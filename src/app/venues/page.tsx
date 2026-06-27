@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { VenueCard } from "@/components/venues/VenueCard";
-import { venues } from "@/lib/mock-data";
+import { getAllVenues } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Venues",
   description: "Discover and review NYC clubs and event spaces.",
 };
 
-export default function VenuesPage() {
-  const sorted = [...venues].sort((a, b) => b.averageRating - a.averageRating);
+export default async function VenuesPage() {
+  const sorted = await getAllVenues();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

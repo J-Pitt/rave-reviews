@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
 import { EventCard } from "@/components/events/EventCard";
-import { events } from "@/lib/mock-data";
+import { getAllEvents } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Events",
   description: "Browse and review NYC club nights and parties.",
 };
 
-export default function EventsPage() {
-  const sorted = [...events].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+export default async function EventsPage() {
+  const sorted = await getAllEvents();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EventCard } from "@/components/events/EventCard";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
@@ -7,43 +8,43 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StarRating } from "@/components/ui/StarRating";
 import {
-  events,
+  getAllEventSlugs,
   getArtist,
   getEventBySlug,
+  getEventsForVenue,
   getReviewsForEvent,
-  getVenue,
-} from "@/lib/mock-data";
+} from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import { Calendar, MapPin, Ticket } from "lucide-react";
-import Link from "next/link";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return events.map((e) => ({ slug: e.slug }));
+  const slugs = await getAllEventSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const event = await getEventBySlug(slug);
   if (!event) return { title: "Event Not Found" };
   return { title: event.title, description: `Reviews for ${event.title}` };
 }
 
 export default async function EventDetailPage({ params }: Props) {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const event = await getEventBySlug(slug);
   if (!event) notFound();
 
-  const venue = getVenue(event.venueId);
-  const eventArtists = event.artistIds
-    .map((id) => getArtist(id))
-    .filter(Boolean);
-  const eventReviews = getReviewsForEvent(event.id);
-  const relatedEvents = events
-    .filter((e) => e.id !== event.id && e.venueId === event.venueId)
+  const venue = event.venue;
+  const eventArtists = (
+    await Promise.all(event.artistIds.map((id) => getArtist(id)))
+  ).filter(Boolean);
+  const eventReviews = await getReviewsForEvent(event.id);
+  const relatedEvents = (await getEventsForVenue(event.venueId))
+    .filter((e) => e.id !== event.id)
     .slice(0, 2);
 
   return (

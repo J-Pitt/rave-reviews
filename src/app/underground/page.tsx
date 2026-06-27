@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { UndergroundPartyCard } from "@/components/underground/UndergroundPartyCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { getUpcomingUndergroundParties } from "@/lib/mock-data";
+import { getUpcomingUndergroundParties } from "@/lib/data";
 import { EyeOff, Plus, Radio } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description: "Community-submitted underground parties across NYC.",
 };
 
-export default function UndergroundPage() {
-  const parties = getUpcomingUndergroundParties();
+export default async function UndergroundPage() {
+  const parties = await getUpcomingUndergroundParties();
   const vagueCount = parties.filter((p) => p.locationVague).length;
 
   return (

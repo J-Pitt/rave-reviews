@@ -13,7 +13,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <Link
       href={`/artists/${artist.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10 hover:-translate-y-1"
+      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
     >
       <div className="relative aspect-square overflow-hidden">
         <Image
@@ -24,7 +24,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
         <div className="absolute bottom-3 left-3 right-3">
-          <h3 className="font-display font-bold text-lg group-hover:text-accent transition-colors">
+          <h3 className="font-display font-bold text-lg group-hover:text-accent-secondary transition-colors">
             {artist.name}
           </h3>
         </div>

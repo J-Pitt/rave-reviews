@@ -1,23 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Event } from "@/lib/types";
-import { getVenue } from "@/lib/mock-data";
+import type { EventWithVenue } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
 import { Calendar, MapPin } from "lucide-react";
 
 interface EventCardProps {
-  event: Event;
+  event: EventWithVenue;
 }
 
 export function EventCard({ event }: EventCardProps) {
-  const venue = getVenue(event.venueId);
+  const venue = event.venue;
 
   return (
     <Link
       href={`/events/${event.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10 hover:-translate-y-1"
+      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image
@@ -39,7 +38,7 @@ export function EventCard({ event }: EventCardProps) {
       </div>
 
       <div className="p-4">
-        <h3 className="font-display font-semibold text-base leading-snug group-hover:text-accent transition-colors">
+        <h3 className="font-display font-semibold text-base leading-snug group-hover:text-accent-secondary transition-colors">
           {event.title}
         </h3>
 

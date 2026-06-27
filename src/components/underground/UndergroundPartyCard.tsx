@@ -16,7 +16,7 @@ export function UndergroundPartyCard({ party }: UndergroundPartyCardProps) {
   return (
     <Link
       href={`/underground/${party.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10 hover:-translate-y-1"
+      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image
@@ -42,7 +42,7 @@ export function UndergroundPartyCard({ party }: UndergroundPartyCardProps) {
       </div>
 
       <div className="p-4">
-        <h3 className="font-display font-semibold text-base leading-snug group-hover:text-accent transition-colors">
+        <h3 className="font-display font-semibold text-base leading-snug group-hover:text-accent-secondary transition-colors">
           {party.title}
         </h3>
 

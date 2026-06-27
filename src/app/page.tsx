@@ -6,23 +6,29 @@ import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { LinkArrow } from "@/components/ui/Button";
 import {
   getFeaturedUndergroundParties,
+  getNeighborhoods,
   getRecentReviews,
+  getStats,
   getTopVenues,
   getTrendingEvents,
-  neighborhoods,
-} from "@/lib/mock-data";
+} from "@/lib/data";
 import { Badge } from "@/components/ui/Badge";
 import { EyeOff } from "lucide-react";
 
-export default function HomePage() {
-  const trendingEvents = getTrendingEvents();
-  const topVenues = getTopVenues();
-  const recentReviews = getRecentReviews(4);
-  const undergroundParties = getFeaturedUndergroundParties(3);
+export default async function HomePage() {
+  const [stats, trendingEvents, topVenues, recentReviews, undergroundParties, neighborhoods] =
+    await Promise.all([
+      getStats(),
+      getTrendingEvents(),
+      getTopVenues(),
+      getRecentReviews(4),
+      getFeaturedUndergroundParties(3),
+      getNeighborhoods(),
+    ]);
 
   return (
     <>
-      <Hero />
+      <Hero stats={stats} />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-8">

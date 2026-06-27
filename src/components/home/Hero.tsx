@@ -2,21 +2,32 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { getStats } from "@/lib/mock-data";
 import { MapPin, Star, Users, Zap } from "lucide-react";
 
-const stats = getStats();
+interface HeroStats {
+  totalReviews: number;
+  totalVenues: number;
+  totalEvents: number;
+  avgRating: string;
+  usingDatabase?: boolean;
+}
+
+interface HeroProps {
+  stats: HeroStats;
+}
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
 };
 
-export function Hero() {
+export function Hero({ stats }: HeroProps) {
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 mesh-bg opacity-40" />
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-accent/10 blur-[120px]" />
+      <div className="absolute inset-0 mesh-bg opacity-30" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[520px] w-[900px] rounded-full bg-accent/15 blur-[140px]" />
+      <div className="absolute -bottom-32 -right-24 h-[400px] w-[500px] rounded-full bg-accent-secondary/10 blur-[120px]" />
+      <div className="absolute top-1/3 -left-32 h-[280px] w-[360px] rounded-full bg-accent-tertiary/12 blur-[100px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-16 sm:px-6 lg:px-8 lg:pt-28 lg:pb-24">
         <motion.div
@@ -28,10 +39,13 @@ export function Hero() {
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-xs font-medium text-accent"
+            className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-4 py-1.5 text-xs font-medium text-accent-secondary"
           >
             <MapPin className="h-3 w-3" />
             New York City Nightlife
+            {stats.usingDatabase && (
+              <span className="text-[10px] opacity-80">· Live data</span>
+            )}
           </motion.div>
 
           <motion.h1
@@ -91,9 +105,9 @@ export function Hero() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="glass-elevated rounded-2xl p-4 text-center glow-accent"
+              className="glass-elevated rounded-2xl p-4 text-center glow-accent border-accent/15"
             >
-              <stat.icon className="mx-auto h-4 w-4 text-accent mb-2" />
+              <stat.icon className="mx-auto h-4 w-4 text-accent-secondary mb-2" />
               <p className="font-display text-2xl font-bold">{stat.value}</p>
               <p className="text-xs text-muted mt-1">{stat.label}</p>
             </div>

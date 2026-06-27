@@ -13,7 +13,7 @@ export function VenueCard({ venue }: VenueCardProps) {
   return (
     <Link
       href={`/venues/${venue.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10 hover:-translate-y-1"
+      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
     >
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
@@ -28,7 +28,7 @@ export function VenueCard({ venue }: VenueCardProps) {
       <div className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h3 className="font-display font-semibold text-base group-hover:text-accent transition-colors">
+            <h3 className="font-display font-semibold text-base group-hover:text-accent-secondary transition-colors">
               {venue.name}
             </h3>
             <p className="mt-1 flex items-center gap-1 text-xs text-muted">

@@ -1,27 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Review } from "@/lib/types";
-import { getArtist, getEvent, getUser, getVenue } from "@/lib/mock-data";
+import type { ReviewWithRelations } from "@/lib/data";
 import { formatRelativeDate } from "@/lib/utils";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
 import { ThumbsUp } from "lucide-react";
 
 interface ReviewCardProps {
-  review: Review;
+  review: ReviewWithRelations;
   compact?: boolean;
 }
 
 export function ReviewCard({ review, compact = false }: ReviewCardProps) {
-  const user = getUser(review.userId);
-  const venue = review.venueId ? getVenue(review.venueId) : undefined;
-  const artist = review.artistId ? getArtist(review.artistId) : undefined;
-  const event = review.eventId ? getEvent(review.eventId) : undefined;
+  const user = review.user;
+  const venue = review.venue;
+  const artist = review.artist;
+  const event = review.event;
 
   if (!user) return null;
 
   return (
-    <article className="glass-elevated rounded-2xl p-5 transition-all duration-300 hover:border-accent/20 hover:shadow-lg hover:shadow-accent/5">
+    <article className="glass-elevated rounded-2xl p-5 transition-all duration-300 hover:border-accent-secondary/20 hover:shadow-lg hover:shadow-accent/5">
       <div className="flex items-start gap-3">
         <Image
           src={user.avatarUrl}
@@ -60,7 +59,7 @@ export function ReviewCard({ review, compact = false }: ReviewCardProps) {
       </div>
 
       <Link href={`/reviews#${review.id}`} className="block mt-3 group">
-        <h3 className="font-display font-semibold text-base group-hover:text-accent transition-colors">
+        <h3 className="font-display font-semibold text-base group-hover:text-accent-secondary transition-colors">
           {review.title}
         </h3>
         <p

@@ -7,34 +7,35 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StarRating } from "@/components/ui/StarRating";
 import {
-  artists,
+  getAllArtistSlugs,
   getArtistBySlug,
   getEventsForArtist,
   getReviewsForArtist,
-} from "@/lib/mock-data";
+} from "@/lib/data";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return artists.map((a) => ({ slug: a.slug }));
+  const slugs = await getAllArtistSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const artist = getArtistBySlug(slug);
+  const artist = await getArtistBySlug(slug);
   if (!artist) return { title: "Artist Not Found" };
   return { title: artist.name, description: artist.bio };
 }
 
 export default async function ArtistDetailPage({ params }: Props) {
   const { slug } = await params;
-  const artist = getArtistBySlug(slug);
+  const artist = await getArtistBySlug(slug);
   if (!artist) notFound();
 
-  const artistReviews = getReviewsForArtist(artist.id);
-  const artistEvents = getEventsForArtist(artist.id);
+  const artistReviews = await getReviewsForArtist(artist.id);
+  const artistEvents = await getEventsForArtist(artist.id);
 
   return (
     <div>

@@ -11,10 +11,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants = {
   primary:
-    "bg-gradient-to-r from-accent to-accent-secondary text-white shadow-lg shadow-accent/25 hover:shadow-accent/40 hover:brightness-110",
-  secondary: "glass text-foreground hover:bg-surface-elevated/80",
-  ghost: "text-muted hover:text-foreground hover:bg-white/5",
-  outline: "border border-border text-foreground hover:border-accent/50 hover:bg-accent/5",
+    "bg-gradient-to-r from-accent-tertiary via-accent to-accent-secondary text-white shadow-lg shadow-accent/20 hover:shadow-accent-secondary/25 hover:brightness-105 border border-accent/20",
+  secondary:
+    "glass text-foreground hover:bg-accent/5 hover:border-accent/20",
+  ghost: "text-muted hover:text-accent-secondary hover:bg-accent/5",
+  outline:
+    "border border-accent/15 text-foreground hover:border-accent/35 hover:bg-accent/5",
 };
 
 const sizes = {
@@ -57,7 +59,7 @@ export function LinkArrow({ href, children }: { href: string; children: React.Re
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-secondary transition-colors"
+      className="group inline-flex items-center gap-1.5 text-sm font-medium text-accent-secondary hover:text-accent transition-colors"
     >
       {children}
       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

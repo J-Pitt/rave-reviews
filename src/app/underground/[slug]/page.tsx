@@ -5,10 +5,10 @@ import { PartyLocation } from "@/components/underground/PartyLocation";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import {
+  getAllUndergroundSlugs,
   getUndergroundPartyBySlug,
   getUser,
-  undergroundParties,
-} from "@/lib/mock-data";
+} from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import { Calendar, Clock, DollarSign, Music, User } from "lucide-react";
 
@@ -17,22 +17,23 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return undergroundParties.map((p) => ({ slug: p.slug }));
+  const slugs = await getAllUndergroundSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const party = getUndergroundPartyBySlug(slug);
+  const party = await getUndergroundPartyBySlug(slug);
   if (!party) return { title: "Party Not Found" };
   return { title: party.title, description: party.description };
 }
 
 export default async function UndergroundDetailPage({ params }: Props) {
   const { slug } = await params;
-  const party = getUndergroundPartyBySlug(slug);
+  const party = await getUndergroundPartyBySlug(slug);
   if (!party) notFound();
 
-  const submitter = getUser(party.submittedByUserId);
+  const submitter = await getUser(party.submittedByUserId);
 
   return (
     <div>

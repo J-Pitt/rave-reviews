@@ -32,9 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${syne.variable} ${dmSans.variable}`}>
-      <body className="min-h-screen flex flex-col">
+      <body className="min-h-screen flex flex-col relative">
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 relative z-10">{children}</main>
         <Footer />
       </body>
     </html>

@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
-import { reviews } from "@/lib/mock-data";
+import { getAllReviews } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Reviews",
   description: "Read community reviews of NYC clubs, parties, and artists.",
 };
 
-export default function ReviewsPage() {
-  const sorted = [...reviews].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+export default async function ReviewsPage() {
+  const sorted = await getAllReviews();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

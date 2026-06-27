@@ -178,15 +178,16 @@ export default function DatabasePage() {
       <div className="max-w-3xl">
         <div className="flex items-center gap-3 mb-2">
           <Database className="h-6 w-6 text-accent" />
-          <Badge variant="accent">Wireframe Only</Badge>
+          <Badge variant="accent">Drizzle + AWS RDS</Badge>
         </div>
         <h1 className="font-display text-3xl font-bold sm:text-4xl">
           Database Schema
         </h1>
         <p className="mt-3 text-muted leading-relaxed">
-          Planned PostgreSQL schema for Rave Reviews. This is a design wireframe —
-          no database has been provisioned or connected. The frontend currently
-          uses mock data from <code className="text-accent text-sm">src/lib/mock-data.ts</code>.
+          PostgreSQL schema for Rave Reviews, connected via Drizzle ORM to AWS RDS
+          when <code className="text-accent text-sm">DATABASE_URL</code> is set.
+          Without it, the app uses mock data from{" "}
+          <code className="text-accent text-sm">src/lib/mock-data.ts</code>.
         </p>
       </div>
 
@@ -315,23 +316,23 @@ export default function DatabasePage() {
       {/* Planned stack */}
       <section className="mt-8">
         <div className="glass-elevated rounded-2xl p-6 border border-accent/20">
-          <h3 className="font-display font-semibold mb-3">Planned Backend Stack</h3>
+          <h3 className="font-display font-semibold mb-3">Connected Stack</h3>
           <div className="grid gap-4 sm:grid-cols-2 text-sm text-muted">
             <div>
               <p className="font-medium text-foreground mb-1">Database</p>
-              <p>PostgreSQL via Supabase or Neon</p>
+              <p>AWS RDS / Aurora PostgreSQL</p>
             </div>
             <div>
               <p className="font-medium text-foreground mb-1">ORM</p>
-              <p>Drizzle ORM with type-safe migrations</p>
+              <p>Drizzle ORM — run npm run db:push to sync</p>
             </div>
             <div>
               <p className="font-medium text-foreground mb-1">Auth</p>
-              <p>NextAuth.js or Clerk for user sessions</p>
+              <p>Guest user for now (u-guest) — add NextAuth/Clerk later</p>
             </div>
             <div>
               <p className="font-medium text-foreground mb-1">API</p>
-              <p>Next.js Server Actions + Route Handlers</p>
+              <p>Next.js Server Actions in src/lib/actions.ts</p>
             </div>
           </div>
         </div>

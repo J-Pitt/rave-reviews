@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StarRating } from "@/components/ui/StarRating";
 import {
+  getAllVenueSlugs,
   getEventsForVenue,
   getReviewsForVenue,
   getVenueBySlug,
-  venues,
-} from "@/lib/mock-data";
+} from "@/lib/data";
 import { MapPin, Users } from "lucide-react";
 
 interface Props {
@@ -19,23 +19,24 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return venues.map((v) => ({ slug: v.slug }));
+  const slugs = await getAllVenueSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const venue = getVenueBySlug(slug);
+  const venue = await getVenueBySlug(slug);
   if (!venue) return { title: "Venue Not Found" };
   return { title: venue.name, description: `Reviews for ${venue.name}` };
 }
 
 export default async function VenueDetailPage({ params }: Props) {
   const { slug } = await params;
-  const venue = getVenueBySlug(slug);
+  const venue = await getVenueBySlug(slug);
   if (!venue) notFound();
 
-  const venueReviews = getReviewsForVenue(venue.id);
-  const venueEvents = getEventsForVenue(venue.id);
+  const venueReviews = await getReviewsForVenue(venue.id);
+  const venueEvents = await getEventsForVenue(venue.id);
 
   return (
     <div>
