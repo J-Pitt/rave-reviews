@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { getAllReviews } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Reviews",
-  description: "Read community reviews of NYC clubs, parties, and artists.",
+  description: "Reviews of NYC clubs, parties, and DJs.",
 };
 
 export default async function ReviewsPage() {
@@ -12,23 +13,31 @@ export default async function ReviewsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="max-w-2xl">
-        <h1 className="font-display text-3xl font-bold sm:text-4xl">
-          Community Reviews
-        </h1>
-        <p className="mt-3 text-muted leading-relaxed">
-          Real experiences from NYC ravers — sound quality, crowd energy, value,
-          and everything in between.
+      <div className="max-w-xl">
+        <h1 className="text-2xl font-semibold">Reviews</h1>
+        <p className="mt-2 text-sm text-muted leading-relaxed">
+          What people wrote after going out — sound, door, crowd, whether it was
+          worth it.
         </p>
       </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
-        {sorted.map((review) => (
-          <div key={review.id} id={review.id}>
-            <ReviewCard review={review} />
-          </div>
-        ))}
-      </div>
+      {sorted.length > 0 ? (
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {sorted.map((review) => (
+            <div key={review.id} id={review.id}>
+              <ReviewCard review={review} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-10">
+          <EmptyState
+            message="No reviews yet."
+            actionLabel="Write a review"
+            actionHref="/write-review"
+          />
+        </div>
+      )}
     </div>
   );
 }

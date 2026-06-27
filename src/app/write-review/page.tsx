@@ -4,7 +4,7 @@ import { databaseStatus, getReviewFormOptions } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Write a Review",
-  description: "Share your NYC nightlife experience with the community.",
+  description: "Post your review of a NYC club night, party, or set.",
 };
 
 export default async function WriteReviewPage() {

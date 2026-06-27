@@ -4,12 +4,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { createUndergroundParty } from "@/lib/actions";
 import { NYC_BOROUGHS, UNDERGROUND_GENRES } from "@/lib/underground";
-import {
-  CheckCircle2,
-  EyeOff,
-  MapPin,
-  Radio,
-} from "lucide-react";
+import { EyeOff, MapPin } from "lucide-react";
 import Link from "next/link";
 
 interface SubmitUndergroundFormProps {
@@ -101,10 +96,9 @@ export function SubmitUndergroundForm({ databaseConfigured }: SubmitUndergroundF
   if (submittedSlug) {
     return (
       <div className="mx-auto max-w-lg px-4 py-24 text-center">
-        <div className="glass-elevated rounded-3xl p-10 glow-accent">
-          <CheckCircle2 className="mx-auto h-12 w-12 text-success mb-4" />
-          <h1 className="font-display text-2xl font-bold">Party Submitted!</h1>
-          <p className="mt-3 text-muted text-sm leading-relaxed">
+        <div className="panel rounded-lg p-10">
+          <h1 className="text-xl font-semibold">Posted</h1>
+          <p className="mt-2 text-sm text-muted">
             Your underground event is live in the database.
             {locationVague && (
               <>
@@ -131,24 +125,19 @@ export function SubmitUndergroundForm({ databaseConfigured }: SubmitUndergroundF
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="flex items-center gap-3 mb-2">
-        <Radio className="h-5 w-5 text-accent" />
-        <h1 className="font-display text-3xl font-bold">Submit a Party</h1>
-      </div>
-      <p className="text-muted text-sm leading-relaxed">
-        Share an underground event with the community. You can keep the location
-        vague — only a general area will show publicly.
+      <h1 className="text-2xl font-semibold">Submit a party</h1>
+      <p className="mt-2 text-sm text-muted leading-relaxed">
+        Post a word-of-mouth event. Address can stay off the listing.
       </p>
 
       {!databaseConfigured && (
-        <p className="mt-4 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning">
-          DATABASE_URL is not set — submissions cannot be saved yet. See README
-          for AWS setup.
+        <p className="mt-4 rounded-md border border-border px-4 py-3 text-sm text-muted">
+          DATABASE_URL is not set — submissions cannot be saved yet.
         </p>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-8">
-        <div className="glass-elevated rounded-2xl p-6 space-y-4">
+      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <div className="panel rounded-lg p-6 space-y-4">
           <label className="block text-sm font-medium">Party Details</label>
 
           <input
@@ -156,7 +145,7 @@ export function SubmitUndergroundForm({ databaseConfigured }: SubmitUndergroundF
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            placeholder="Event name — e.g. SIGNAL Warehouse Session"
+            placeholder="Event name"
             className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
           />
 
@@ -165,7 +154,7 @@ export function SubmitUndergroundForm({ databaseConfigured }: SubmitUndergroundF
             onChange={(e) => setDescription(e.target.value)}
             required
             rows={4}
-            placeholder="What's the vibe? Sound system, door policy, what to bring..."
+            placeholder="What's the plan? Door, music, anything people should know"
             className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm resize-none focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
           />
 
@@ -228,8 +217,8 @@ export function SubmitUndergroundForm({ databaseConfigured }: SubmitUndergroundF
                   onClick={() => toggleGenre(genre)}
                   className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
                     selectedGenres.includes(genre)
-                      ? "bg-accent text-white"
-                      : "glass text-muted hover:text-foreground"
+                      ? "bg-foreground text-background"
+                      : "panel text-muted hover:text-foreground"
                   }`}
                 >
                   {genre}
@@ -247,7 +236,7 @@ export function SubmitUndergroundForm({ databaseConfigured }: SubmitUndergroundF
           />
         </div>
 
-        <div className="glass-elevated rounded-2xl p-6 space-y-4">
+        <div className="panel rounded-lg p-6 space-y-4">
           <div className="flex items-start justify-between gap-4">
             <div>
               <label className="flex items-center gap-2 text-sm font-medium">
@@ -271,7 +260,7 @@ export function SubmitUndergroundForm({ databaseConfigured }: SubmitUndergroundF
           >
             <div
               className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                locationVague ? "bg-accent text-white" : "glass text-muted"
+                locationVague ? "bg-foreground text-background" : "glass text-muted"
               }`}
             >
               <EyeOff className="h-5 w-5" />

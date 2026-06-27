@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { EventCard } from "@/components/events/EventCard";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { StarRating } from "@/components/ui/StarRating";
 import {
   getAllVenueSlugs,
@@ -39,74 +39,75 @@ export default async function VenueDetailPage({ params }: Props) {
   const venueEvents = await getEventsForVenue(venue.id);
 
   return (
-    <div>
-      <div className="relative h-[40vh] min-h-[320px] overflow-hidden">
-        <Image
-          src={venue.imageUrl}
-          alt={venue.name}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
-      </div>
-
-      <div className="mx-auto max-w-7xl px-4 -mt-24 relative sm:px-6 lg:px-8 pb-16">
-        <div className="flex flex-wrap gap-2 mb-4">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="max-w-3xl">
+        <div className="flex flex-wrap gap-2">
           {venue.tags.map((tag) => (
-            <Badge key={tag} variant="accent">
-              {tag}
-            </Badge>
+            <Badge key={tag}>{tag}</Badge>
           ))}
         </div>
 
-        <h1 className="font-display text-3xl font-bold sm:text-4xl lg:text-5xl">
-          {venue.name}
-        </h1>
+        <h1 className="mt-4 text-2xl font-semibold sm:text-3xl">{venue.name}</h1>
 
-        <div className="mt-4 flex flex-wrap items-center gap-6 text-sm text-muted">
-          <span className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-accent" />
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
+          <span className="flex items-center gap-1.5">
+            <MapPin className="h-3.5 w-3.5" />
             {venue.neighborhood}, {venue.borough}
           </span>
           {venue.capacity && (
-            <span className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-accent" />
-              Capacity {venue.capacity}
+            <span className="flex items-center gap-1.5">
+              <Users className="h-3.5 w-3.5" />
+              {venue.capacity} cap
             </span>
           )}
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-4">
-          <StarRating rating={venue.averageRating} size="lg" showValue />
-          <span className="text-sm text-muted">{venue.reviewCount} reviews</span>
-          <Button href="/write-review" size="sm">
-            Write a Review
+        <div className="mt-5 flex flex-wrap items-center gap-4">
+          {venue.reviewCount > 0 ? (
+            <>
+              <StarRating rating={venue.averageRating} size="lg" showValue />
+              <span className="text-sm text-muted">
+                {venue.reviewCount} review{venue.reviewCount === 1 ? "" : "s"}
+              </span>
+            </>
+          ) : (
+            <span className="text-sm text-muted">No reviews yet</span>
+          )}
+          <Button href="/write-review" size="sm" variant="secondary">
+            Write a review
           </Button>
         </div>
+      </div>
 
-        {venueEvents.length > 0 && (
-          <section className="mt-14">
-            <h2 className="font-display text-2xl font-bold mb-6">Upcoming Events</h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {venueEvents.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </div>
-          </section>
-        )}
+      {venueEvents.length > 0 && (
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold mb-4">Events here</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl">
+            {venueEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        </section>
+      )}
 
-        <section className="mt-14">
-          <h2 className="font-display text-2xl font-bold mb-6">
-            Reviews ({venueReviews.length})
-          </h2>
-          <div className="grid gap-6 md:grid-cols-2">
+      <section className="mt-12 max-w-4xl">
+        <h2 className="text-lg font-semibold mb-4">
+          Reviews{venueReviews.length > 0 && ` (${venueReviews.length})`}
+        </h2>
+        {venueReviews.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-2">
             {venueReviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
           </div>
-        </section>
-      </div>
+        ) : (
+          <EmptyState
+            message="No reviews for this venue yet."
+            actionLabel="Write one"
+            actionHref="/write-review"
+          />
+        )}
+      </section>
     </div>
   );
 }

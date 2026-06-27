@@ -6,9 +6,10 @@ import { getDb } from "@/db";
 import { artists, events, reviewTags, reviews, undergroundParties, venues } from "@/db/schema";
 import { newId, uniqueSlug } from "@/lib/mappers";
 
+import { PLACEHOLDER_IMAGE } from "@/lib/placeholder";
+
 const GUEST_USER_ID = "u-guest";
-const DEFAULT_PARTY_IMAGE =
-  "https://images.unsplash.com/photo-1571266028247-a1100fed8a22?w=800&h=600&fit=crop";
+const DEFAULT_PARTY_IMAGE = PLACEHOLDER_IMAGE;
 
 export type ActionResult =
   | { success: true; id: string; slug?: string }

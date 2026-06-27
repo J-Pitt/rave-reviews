@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { EventWithVenue } from "@/lib/data";
+import { PLACEHOLDER_IMAGE } from "@/lib/placeholder";
 import { formatDate } from "@/lib/utils";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
@@ -16,29 +17,24 @@ export function EventCard({ event }: EventCardProps) {
   return (
     <Link
       href={`/events/${event.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
+      className="group panel block overflow-hidden rounded-lg transition-colors hover:border-muted/30"
     >
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-surface-elevated">
         <Image
-          src={event.imageUrl}
-          alt={event.title}
+          src={event.imageUrl || PLACEHOLDER_IMAGE}
+          alt=""
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-        <div className="absolute bottom-3 left-3 right-3">
-          <div className="flex flex-wrap gap-1.5 mb-2">
-            {event.genre.map((g) => (
-              <Badge key={g} variant="accent">
-                {g}
-              </Badge>
-            ))}
-          </div>
+        <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+          {event.genre.map((g) => (
+            <Badge key={g}>{g}</Badge>
+          ))}
         </div>
       </div>
 
       <div className="p-4">
-        <h3 className="font-display font-semibold text-base leading-snug group-hover:text-accent-secondary transition-colors">
+        <h3 className="font-medium text-sm leading-snug group-hover:text-foreground">
           {event.title}
         </h3>
 
@@ -54,10 +50,14 @@ export function EventCard({ event }: EventCardProps) {
             <Calendar className="h-3 w-3" />
             {formatDate(event.date)}
           </span>
-          <div className="flex items-center gap-2">
-            <StarRating rating={event.averageRating} size="sm" showValue />
-            <span className="text-xs text-muted">({event.reviewCount})</span>
-          </div>
+          {event.reviewCount > 0 ? (
+            <div className="flex items-center gap-2">
+              <StarRating rating={event.averageRating} size="sm" showValue />
+              <span className="text-xs text-muted">({event.reviewCount})</span>
+            </div>
+          ) : (
+            <span className="text-xs text-muted">No reviews</span>
+          )}
         </div>
       </div>
     </Link>

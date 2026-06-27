@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Venue } from "@/lib/types";
+import { PLACEHOLDER_IMAGE } from "@/lib/placeholder";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
 import { MapPin, Users } from "lucide-react";
@@ -13,46 +14,51 @@ export function VenueCard({ venue }: VenueCardProps) {
   return (
     <Link
       href={`/venues/${venue.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
+      className="group panel block overflow-hidden rounded-lg transition-colors hover:border-muted/30"
     >
-      <div className="relative aspect-[16/9] overflow-hidden">
+      <div className="relative aspect-[16/9] overflow-hidden border-b border-border bg-surface-elevated">
         <Image
-          src={venue.imageUrl}
-          alt={venue.name}
+          src={venue.imageUrl || PLACEHOLDER_IMAGE}
+          alt=""
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       </div>
 
       <div className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h3 className="font-display font-semibold text-base group-hover:text-accent-secondary transition-colors">
-              {venue.name}
-            </h3>
+            <h3 className="font-medium text-sm">{venue.name}</h3>
             <p className="mt-1 flex items-center gap-1 text-xs text-muted">
               <MapPin className="h-3 w-3" />
               {venue.neighborhood}, {venue.borough}
             </p>
           </div>
-          <StarRating rating={venue.averageRating} size="sm" showValue />
+          {venue.reviewCount > 0 && (
+            <StarRating rating={venue.averageRating} size="sm" showValue />
+          )}
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {venue.tags.slice(0, 3).map((tag) => (
-            <Badge key={tag}>{tag}</Badge>
-          ))}
-        </div>
+        {venue.tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {venue.tags.slice(0, 3).map((tag) => (
+              <Badge key={tag}>{tag}</Badge>
+            ))}
+          </div>
+        )}
 
         <div className="mt-3 flex items-center justify-between text-xs text-muted">
           {venue.capacity && (
             <span className="flex items-center gap-1">
               <Users className="h-3 w-3" />
-              {venue.capacity} cap
+              {venue.capacity}
             </span>
           )}
-          <span>{venue.reviewCount} reviews</span>
+          <span>
+            {venue.reviewCount > 0
+              ? `${venue.reviewCount} review${venue.reviewCount === 1 ? "" : "s"}`
+              : "No reviews yet"}
+          </span>
         </div>
       </div>
     </Link>

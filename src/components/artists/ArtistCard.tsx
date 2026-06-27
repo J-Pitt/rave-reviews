@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Artist } from "@/lib/types";
+import { PLACEHOLDER_IMAGE } from "@/lib/placeholder";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
 import { Music } from "lucide-react";
@@ -13,39 +14,39 @@ export function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <Link
       href={`/artists/${artist.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
+      className="group panel block overflow-hidden rounded-lg transition-colors hover:border-muted/30"
     >
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden border-b border-border bg-surface-elevated">
         <Image
-          src={artist.imageUrl}
-          alt={artist.name}
+          src={artist.imageUrl || PLACEHOLDER_IMAGE}
+          alt=""
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-        <div className="absolute bottom-3 left-3 right-3">
-          <h3 className="font-display font-bold text-lg group-hover:text-accent-secondary transition-colors">
-            {artist.name}
-          </h3>
-        </div>
       </div>
 
       <div className="p-4">
-        <div className="flex flex-wrap gap-1.5">
+        <h3 className="font-medium text-sm">{artist.name}</h3>
+
+        <div className="mt-2 flex flex-wrap gap-1.5">
           {artist.genre.map((g) => (
-            <Badge key={g} variant="accent">
-              {g}
-            </Badge>
+            <Badge key={g}>{g}</Badge>
           ))}
         </div>
 
-        <p className="mt-2 text-xs text-muted line-clamp-2">{artist.bio}</p>
+        {artist.bio && (
+          <p className="mt-2 text-xs text-muted line-clamp-2">{artist.bio}</p>
+        )}
 
         <div className="mt-3 flex items-center justify-between">
-          <StarRating rating={artist.averageRating} size="sm" showValue />
+          {artist.reviewCount > 0 ? (
+            <StarRating rating={artist.averageRating} size="sm" showValue />
+          ) : (
+            <span className="text-xs text-muted">No reviews yet</span>
+          )}
           <span className="flex items-center gap-1 text-xs text-muted">
             <Music className="h-3 w-3" />
-            {artist.reviewCount} reviews
+            {artist.reviewCount}
           </span>
         </div>
       </div>

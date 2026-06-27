@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { UndergroundParty } from "@/lib/types";
+import { PLACEHOLDER_IMAGE } from "@/lib/placeholder";
 import { formatPartyLocation } from "@/lib/underground";
 import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
@@ -16,35 +17,27 @@ export function UndergroundPartyCard({ party }: UndergroundPartyCardProps) {
   return (
     <Link
       href={`/underground/${party.slug}`}
-      className="group glass-elevated rounded-2xl overflow-hidden transition-all duration-300 hover:border-accent-secondary/25 hover:shadow-xl hover:shadow-accent/8 hover:-translate-y-0.5"
+      className="group panel block overflow-hidden rounded-lg transition-colors hover:border-muted/30"
     >
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-surface-elevated">
         <Image
-          src={party.imageUrl}
-          alt={party.title}
+          src={party.imageUrl || PLACEHOLDER_IMAGE}
+          alt=""
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
         {party.locationVague && (
           <div className="absolute top-3 left-3">
-            <Badge variant="accent" className="gap-1">
+            <Badge className="gap-1">
               <EyeOff className="h-3 w-3" />
-              Vague location
+              Location TBD
             </Badge>
           </div>
         )}
-        <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5">
-          {party.genre.slice(0, 2).map((g) => (
-            <Badge key={g}>{g}</Badge>
-          ))}
-        </div>
       </div>
 
       <div className="p-4">
-        <h3 className="font-display font-semibold text-base leading-snug group-hover:text-accent-secondary transition-colors">
-          {party.title}
-        </h3>
+        <h3 className="font-medium text-sm leading-snug">{party.title}</h3>
 
         <div className="mt-2 flex items-start gap-1.5 text-xs text-muted">
           <MapPin className="h-3 w-3 shrink-0 mt-0.5" />
@@ -67,6 +60,14 @@ export function UndergroundPartyCard({ party }: UndergroundPartyCardProps) {
             <Music className="h-3 w-3 shrink-0" />
             {party.lineup.join(" · ")}
           </p>
+        )}
+
+        {party.genre.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {party.genre.slice(0, 2).map((g) => (
+              <Badge key={g}>{g}</Badge>
+            ))}
+          </div>
         )}
       </div>
     </Link>

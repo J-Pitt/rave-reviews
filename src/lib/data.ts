@@ -463,23 +463,29 @@ export async function getRecentReviews(limit = 6): Promise<ReviewWithRelations[]
 
 export async function getStats() {
   return withDb(async (db) => {
-    const [reviewRows, venueRows, eventRows, artistRows, undergroundRows, avgRow] =
+    const [reviewRows, venueRows, eventRows, artistRows, undergroundRows] =
       await Promise.all([
         db.select({ count: count() }).from(reviews),
         db.select({ count: count() }).from(venues),
         db.select({ count: count() }).from(events),
         db.select({ count: count() }).from(artists),
         db.select({ count: count() }).from(undergroundParties),
-        db.select({ avg: avg(reviews.overallRating) }).from(reviews),
       ]);
 
+    const reviewCount = Number(reviewRows[0]?.count ?? 0);
+    const ratingAvgRows = await db
+      .select({ avg: avg(reviews.overallRating) })
+      .from(reviews);
+    const ratingAvg = ratingAvgRows[0]?.avg;
+
     return {
-      totalReviews: Number(reviewRows[0]?.count ?? 0),
+      totalReviews: reviewCount,
       totalVenues: Number(venueRows[0]?.count ?? 0),
       totalEvents: Number(eventRows[0]?.count ?? 0),
       totalArtists: Number(artistRows[0]?.count ?? 0),
       totalUnderground: Number(undergroundRows[0]?.count ?? 0),
-      avgRating: Number(avgRow[0]?.avg ?? 0).toFixed(1),
+      avgRating:
+        reviewCount > 0 && ratingAvg != null ? Number(ratingAvg).toFixed(1) : "—",
       usingDatabase: true,
     };
   }, () => ({ ...mock.getStats(), usingDatabase: false }));

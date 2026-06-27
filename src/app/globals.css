@@ -1,23 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 
-  /* Deep nightclub base — plum-black, not flat gray */
-  --color-background: #030308;
-  --color-surface: #0a0812;
-  --color-surface-elevated: #110e1a;
-  --color-border: rgba(167, 139, 250, 0.1);
-  --color-muted: #918da8;
-  --color-foreground: #f2eef8;
+  --color-background: #0a0a0b;
+  --color-surface: #111113;
+  --color-surface-elevated: #18181b;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-muted: #71717a;
+  --color-foreground: #e4e4e7;
 
-  /* Purple → fuchsia only — no cyan/rainbow */
-  --color-accent: #8b5cf6;
-  --color-accent-secondary: #d946ef;
-  --color-accent-tertiary: #6d28d9;
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
+  --color-accent: #a1a1aa;
+  --color-accent-secondary: #d4d4d8;
+  --color-accent-tertiary: #52525b;
+  --color-success: #4ade80;
+  --color-warning: #facc15;
 }
 
 @layer base {
@@ -28,92 +26,20 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
-    background-color: var(--color-background);
-    background-image:
-      radial-gradient(ellipse 90% 55% at 50% -15%, rgba(139, 92, 246, 0.18), transparent 55%),
-      radial-gradient(ellipse 50% 45% at 95% 15%, rgba(217, 70, 239, 0.1), transparent 50%),
-      radial-gradient(ellipse 45% 40% at 5% 85%, rgba(109, 40, 217, 0.12), transparent 50%),
-      radial-gradient(ellipse 100% 80% at 50% 100%, rgba(3, 3, 8, 0.9), transparent 70%);
-    background-attachment: fixed;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background: radial-gradient(
-      ellipse 120% 80% at 50% 50%,
-      transparent 40%,
-      rgba(3, 3, 8, 0.45) 100%
-    );
   }
 
   ::selection {
-    background: rgba(139, 92, 246, 0.4);
-    color: #faf5ff;
+    background: rgba(161, 161, 170, 0.35);
+    color: #fafafa;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply border border-border bg-surface/55 backdrop-blur-xl;
-    box-shadow: inset 0 1px 0 rgba(167, 139, 250, 0.06);
+  .panel {
+    @apply border border-border bg-surface;
   }
 
-  .glass-elevated {
-    @apply border border-border bg-surface-elevated/75 backdrop-blur-xl;
-    box-shadow:
-      inset 0 1px 0 rgba(167, 139, 250, 0.08),
-      0 4px 24px rgba(0, 0, 0, 0.35);
-  }
-
-  .gradient-text {
-    @apply bg-gradient-to-r from-accent via-accent-secondary to-accent-tertiary bg-clip-text text-transparent;
-  }
-
-  .glow-accent {
-    box-shadow:
-      0 0 32px rgba(139, 92, 246, 0.12),
-      0 0 64px rgba(217, 70, 239, 0.06),
-      inset 0 1px 0 rgba(167, 139, 250, 0.1);
-  }
-
-  .mesh-bg {
-    background-image:
-      linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
-    background-size: 72px 72px;
-  }
-
-  .night-glow {
-    position: relative;
-  }
-
-  .night-glow::after {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    background: linear-gradient(
-      135deg,
-      rgba(139, 92, 246, 0.15),
-      rgba(217, 70, 239, 0.08)
-    );
-    z-index: -1;
-  }
-
-  .night-glow:hover::after {
-    opacity: 1;
-  }
-
-  .header-glow {
-    box-shadow:
-      0 1px 0 rgba(167, 139, 250, 0.12),
-      0 8px 32px rgba(88, 28, 135, 0.08);
+  .panel-elevated {
+    @apply border border-border bg-surface-elevated;
   }
 }
