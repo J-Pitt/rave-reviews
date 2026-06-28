@@ -1,0 +1,112 @@
+/** Starter listings — real NYC names, no reviews or filler copy. */
+export const PLACEHOLDER = "/placeholder.svg";
+
+export const catalogVenues = [
+  {
+    id: "v-basement",
+    slug: "basement",
+    name: "Basement",
+    neighborhood: "Ridgewood",
+    borough: "Queens",
+    address: "Basement, Ridgewood, NY",
+    imageUrl: PLACEHOLDER,
+    capacity: 400,
+    tags: ["Techno"],
+  },
+  {
+    id: "v-nowadays",
+    slug: "nowadays",
+    name: "Nowadays",
+    neighborhood: "Ridgewood",
+    borough: "Queens",
+    address: "56-06 Cooper Ave, Queens, NY",
+    imageUrl: PLACEHOLDER,
+    capacity: 600,
+    tags: ["House", "Outdoor"],
+  },
+  {
+    id: "v-public-records",
+    slug: "public-records",
+    name: "Public Records",
+    neighborhood: "Gowanus",
+    borough: "Brooklyn",
+    address: "233 Butler St, Brooklyn, NY",
+    imageUrl: PLACEHOLDER,
+    capacity: 350,
+    tags: ["House"],
+  },
+  {
+    id: "v-knockdown",
+    slug: "knockdown-center",
+    name: "Knockdown Center",
+    neighborhood: "Maspeth",
+    borough: "Queens",
+    address: "52-19 Flushing Ave, Queens, NY",
+    imageUrl: PLACEHOLDER,
+    capacity: 2000,
+    tags: ["Multi-genre"],
+  },
+] as const;
+
+export const catalogArtists = [
+  {
+    id: "a-holographic",
+    slug: "dj-holographic",
+    name: "DJ Holographic",
+    genre: ["House"],
+    imageUrl: PLACEHOLDER,
+    bio: "",
+  },
+  {
+    id: "a-martinez",
+    slug: "the-martinez-brothers",
+    name: "The Martinez Brothers",
+    genre: ["House"],
+    imageUrl: PLACEHOLDER,
+    bio: "",
+  },
+  {
+    id: "a-local",
+    slug: "local-selector",
+    name: "Local selector (add name)",
+    genre: ["Techno", "House"],
+    imageUrl: PLACEHOLDER,
+    bio: "",
+  },
+] as const;
+
+export const catalogEvents = [
+  {
+    id: "e-basement-weekend",
+    slug: "basement-weekend",
+    title: "Basement — weekend",
+    date: "2026-07-12",
+    venueId: "v-basement",
+    artistIds: ["a-local"],
+    imageUrl: PLACEHOLDER,
+    genre: ["Techno"],
+    ticketPrice: null as string | null,
+  },
+  {
+    id: "e-nowadays-day",
+    slug: "nowadays-day-party",
+    title: "Nowadays day party",
+    date: "2026-07-19",
+    venueId: "v-nowadays",
+    artistIds: ["a-holographic"],
+    imageUrl: PLACEHOLDER,
+    genre: ["House"],
+    ticketPrice: null,
+  },
+  {
+    id: "e-public-records",
+    slug: "public-records-night",
+    title: "Public Records",
+    date: "2026-07-26",
+    venueId: "v-public-records",
+    artistIds: ["a-martinez"],
+    imageUrl: PLACEHOLDER,
+    genre: ["House"],
+    ticketPrice: null,
+  },
+] as const;

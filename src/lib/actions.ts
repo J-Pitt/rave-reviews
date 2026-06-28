@@ -3,7 +3,15 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { getDb } from "@/db";
-import { artists, events, reviewTags, reviews, undergroundParties, venues } from "@/db/schema";
+import {
+  artists,
+  eventArtists,
+  events,
+  reviewTags,
+  reviews,
+  undergroundParties,
+  venues,
+} from "@/db/schema";
 import { newId, uniqueSlug } from "@/lib/mappers";
 
 import { PLACEHOLDER_IMAGE } from "@/lib/placeholder";
@@ -172,5 +180,158 @@ export async function createUndergroundParty(input: {
   } catch (error) {
     console.error("createUndergroundParty failed:", error);
     return { success: false, error: "Could not save party. Check your database connection." };
+  }
+}
+
+export async function createVenue(input: {
+  name: string;
+  neighborhood: string;
+  borough: string;
+  address: string;
+  tags?: string[];
+  capacity?: number;
+}): Promise<ActionResult> {
+  const db = getDb();
+  if (!db) {
+    return { success: false, error: "Database is not configured. Set DATABASE_URL in .env.local." };
+  }
+
+  if (!input.name.trim() || !input.neighborhood.trim() || !input.borough.trim()) {
+    return { success: false, error: "Name, neighborhood, and borough are required." };
+  }
+
+  const address = input.address.trim() || `${input.name.trim()}, ${input.borough.trim()}`;
+
+  try {
+    const existing = await db.select({ slug: venues.slug }).from(venues);
+    const slug = uniqueSlug(input.name, new Set(existing.map((r) => r.slug)));
+    const id = newId("v");
+
+    await db.insert(venues).values({
+      id,
+      slug,
+      name: input.name.trim(),
+      neighborhood: input.neighborhood.trim(),
+      borough: input.borough.trim(),
+      address,
+      imageUrl: PLACEHOLDER_IMAGE,
+      capacity: input.capacity ?? null,
+      tags: input.tags ?? [],
+    });
+
+    revalidatePath("/venues");
+    revalidatePath("/write-review");
+    revalidatePath("/add-listing");
+    revalidatePath("/");
+    revalidatePath(`/venues/${slug}`);
+
+    return { success: true, id, slug };
+  } catch (error) {
+    console.error("createVenue failed:", error);
+    return { success: false, error: "Could not save venue. Check your database connection." };
+  }
+}
+
+export async function createArtist(input: {
+  name: string;
+  genre?: string[];
+  bio?: string;
+}): Promise<ActionResult> {
+  const db = getDb();
+  if (!db) {
+    return { success: false, error: "Database is not configured. Set DATABASE_URL in .env.local." };
+  }
+
+  if (!input.name.trim()) {
+    return { success: false, error: "Artist name is required." };
+  }
+
+  try {
+    const existing = await db.select({ slug: artists.slug }).from(artists);
+    const slug = uniqueSlug(input.name, new Set(existing.map((r) => r.slug)));
+    const id = newId("a");
+
+    await db.insert(artists).values({
+      id,
+      slug,
+      name: input.name.trim(),
+      genre: input.genre ?? [],
+      imageUrl: PLACEHOLDER_IMAGE,
+      bio: input.bio?.trim() || "",
+    });
+
+    revalidatePath("/artists");
+    revalidatePath("/write-review");
+    revalidatePath("/add-listing");
+    revalidatePath("/");
+    revalidatePath(`/artists/${slug}`);
+
+    return { success: true, id, slug };
+  } catch (error) {
+    console.error("createArtist failed:", error);
+    return { success: false, error: "Could not save artist. Check your database connection." };
+  }
+}
+
+export async function createEvent(input: {
+  title: string;
+  date: string;
+  venueId: string;
+  artistIds?: string[];
+  genre?: string[];
+  ticketPrice?: string;
+}): Promise<ActionResult> {
+  const db = getDb();
+  if (!db) {
+    return { success: false, error: "Database is not configured. Set DATABASE_URL in .env.local." };
+  }
+
+  if (!input.title.trim() || !input.date || !input.venueId) {
+    return { success: false, error: "Title, date, and venue are required." };
+  }
+
+  try {
+    const [venue] = await db
+      .select({ id: venues.id })
+      .from(venues)
+      .where(eq(venues.id, input.venueId))
+      .limit(1);
+
+    if (!venue) {
+      return { success: false, error: "Pick a venue from the list or add one first." };
+    }
+
+    const existing = await db.select({ slug: events.slug }).from(events);
+    const slug = uniqueSlug(input.title, new Set(existing.map((r) => r.slug)));
+    const id = newId("e");
+
+    await db.insert(events).values({
+      id,
+      slug,
+      title: input.title.trim(),
+      date: input.date,
+      venueId: input.venueId,
+      imageUrl: PLACEHOLDER_IMAGE,
+      genre: input.genre ?? [],
+      ticketPrice: input.ticketPrice?.trim() || null,
+    });
+
+    const artistIds = (input.artistIds ?? []).filter(Boolean);
+    if (artistIds.length > 0) {
+      await db.insert(eventArtists).values(
+        artistIds.map((artistId) => ({ eventId: id, artistId }))
+      );
+    }
+
+    revalidatePath("/events");
+    revalidatePath("/write-review");
+    revalidatePath("/add-listing");
+    revalidatePath("/");
+    revalidatePath(`/events/${slug}`);
+
+    return { success: true, id, slug };
+  } catch (error) {
+    console.error("createEvent failed:", error);
+    return { success: false, error: "Could not save event. Check your database connection." };
   }
 }

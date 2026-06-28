@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArtistCard } from "@/components/artists/ArtistCard";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Button } from "@/components/ui/Button";
 import { getAllArtists } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -13,11 +14,16 @@ export default async function ArtistsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="max-w-xl">
-        <h1 className="text-2xl font-semibold">Artists</h1>
-        <p className="mt-2 text-sm text-muted leading-relaxed">
-          DJs and live acts — rated by people who saw them play.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="max-w-xl">
+          <h1 className="text-2xl font-semibold">Artists</h1>
+          <p className="mt-2 text-sm text-muted leading-relaxed">
+            DJs and live acts — rated by people who saw them play.
+          </p>
+        </div>
+        <Button href="/add-listing?type=artist" variant="secondary" size="sm">
+          Add artist
+        </Button>
       </div>
 
       {sorted.length > 0 ? (
@@ -28,7 +34,11 @@ export default async function ArtistsPage() {
         </div>
       ) : (
         <div className="mt-10">
-          <EmptyState message="No artists listed yet." />
+          <EmptyState
+            message="No artists listed yet."
+            actionLabel="Add an artist"
+            actionHref="/add-listing?type=artist"
+          />
         </div>
       )}
     </div>

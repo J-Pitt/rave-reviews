@@ -45,6 +45,9 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <Button variant="ghost" size="sm" href="/add-listing">
+            Add listing
+          </Button>
           <Button variant="ghost" size="sm" href="/write-review">
             Write review
           </Button>
@@ -77,6 +80,9 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
+              <Button variant="secondary" href="/add-listing">
+                Add listing
+              </Button>
               <Button variant="secondary" href="/underground/submit">
                 Submit a party
               </Button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { InteractiveStarRating } from "@/components/ui/StarRating";
 import { createReview } from "@/lib/actions";
@@ -14,6 +15,8 @@ interface WriteReviewFormProps {
   venues: Venue[];
   artists: Artist[];
   databaseConfigured: boolean;
+  initialReviewType?: ReviewType;
+  initialTargetId?: string;
 }
 
 export function WriteReviewForm({
@@ -21,9 +24,11 @@ export function WriteReviewForm({
   venues,
   artists,
   databaseConfigured,
+  initialReviewType = "event",
+  initialTargetId = "",
 }: WriteReviewFormProps) {
-  const [reviewType, setReviewType] = useState<ReviewType>("event");
-  const [targetId, setTargetId] = useState("");
+  const [reviewType, setReviewType] = useState<ReviewType>(initialReviewType);
+  const [targetId, setTargetId] = useState(initialTargetId);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [overall, setOverall] = useState(0);
@@ -137,19 +142,42 @@ export function WriteReviewForm({
             ))}
           </div>
 
-          <select
-            value={targetId}
-            onChange={(e) => setTargetId(e.target.value)}
-            required
-            className="w-full rounded-md border border-border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-foreground/20"
-          >
-            <option value="">Pick a {reviewType}…</option>
-            {targets.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.label}
-              </option>
-            ))}
-          </select>
+          {targets.length === 0 ? (
+            <p className="text-sm text-muted">
+              Nothing listed yet.{" "}
+              <Link
+                href={`/add-listing?type=${reviewType}`}
+                className="text-foreground underline"
+              >
+                Add a {reviewType}
+              </Link>
+            </p>
+          ) : (
+            <>
+              <select
+                value={targetId}
+                onChange={(e) => setTargetId(e.target.value)}
+                required
+                className="w-full rounded-md border border-border bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-foreground/20"
+              >
+                <option value="">Pick a {reviewType}…</option>
+                {targets.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-muted">
+                Missing from the list?{" "}
+                <Link
+                  href={`/add-listing?type=${reviewType}`}
+                  className="text-foreground underline"
+                >
+                  Add a {reviewType}
+                </Link>
+              </p>
+            </>
+          )}
         </div>
 
         <div className="panel rounded-lg p-5 space-y-4">
@@ -204,7 +232,12 @@ export function WriteReviewForm({
 
         {error && <p className="text-sm text-red-400">{error}</p>}
 
-        <Button type="submit" size="lg" className="w-full" disabled={isPending}>
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={isPending || targets.length === 0}
+        >
           {isPending ? "Saving…" : "Post review"}
         </Button>
       </form>

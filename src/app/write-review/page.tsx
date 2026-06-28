@@ -7,7 +7,19 @@ export const metadata: Metadata = {
   description: "Post your review of a NYC club night, party, or set.",
 };
 
-export default async function WriteReviewPage() {
+type ReviewType = "event" | "venue" | "artist";
+
+function parseReviewType(value: string | undefined): ReviewType {
+  if (value === "event" || value === "venue" || value === "artist") return value;
+  return "event";
+}
+
+export default async function WriteReviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string; id?: string }>;
+}) {
+  const params = await searchParams;
   const [{ events, venues, artists }, { configured }] = await Promise.all([
     getReviewFormOptions(),
     Promise.resolve(databaseStatus()),
@@ -19,6 +31,8 @@ export default async function WriteReviewPage() {
       venues={venues}
       artists={artists}
       databaseConfigured={configured}
+      initialReviewType={parseReviewType(params.type)}
+      initialTargetId={params.id ?? ""}
     />
   );
 }
